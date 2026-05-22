@@ -668,6 +668,7 @@ recording = {
 	swapplayers = true,
 	replayP1 = false,
 	replayP2 = true,
+	humanplayer = 1,
 	maxstarttime = 0,
 	starttime = 0,
 	startcounter = 0,
@@ -1687,7 +1688,11 @@ togglePlayBack = function(bool, vargs)
 	if bool==nil then recording.playback = not recording.playback
 	else recording.playback = bool end
 	
-	if not recording.replayP1 and not recording.replayP2 then
+	if recording.humanplayer == 2 then
+		recording.replayP1 = true
+		recording.replayP2 = false
+	else
+		recording.replayP1 = false
 		recording.replayP2 = true
 	end
 
@@ -1770,7 +1775,7 @@ local playBack = function()
 	elseif recording.replayP1 then
 		inputs.setinputs = combinePlayerInputs(raw.p1, inputs.p2, raw.other)	
 	else
-		inputs.setinputs = combinePlayerInputs(raw.p1, inputs.p1, raw.other)
+		inputs.setinputs = combinePlayerInputs(inputs.p1, raw.p2, raw.other)
 	end
 	recordslot[fc - recordslot.framestart + start].raw = nil
 	recordslot[fc - recordslot.framestart + start].p1facingleft = nil

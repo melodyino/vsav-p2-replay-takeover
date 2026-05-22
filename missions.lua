@@ -1028,6 +1028,9 @@ input.registerhotkey(5, function()
 	else
 		-- auto-save a mission from a replay
 		if (r_frame == 0) then
+			if recording.replayP2recording then return end
+			recording.humanplayer = 1
+			recording.replayP1recording = true
 			local mission_savestate = savestate.create("new_savestate")
 			savestate.save(mission_savestate)
 			recording.replayP1 = true
@@ -1048,13 +1051,14 @@ input.registerhotkey(5, function()
 			saveMission()
 			emu.takeover()
 			REPLAY=false
+			recording.replayP1recording = false
 			mission_selector = 1
 			missions_checked[1] = loadMissionTakeover()
 			playMission(missions_checked[1])
 			local txt1 = "RECORDED "..recorded.." frames."
 			local txt2 = "To take over load: Add-On > Missions > REPLAY_"..r_frame
 			showTxt(480, txt1, txt2)
-			--r_frame = 0
+			r_frame = 0
 		end
 	end
 end)
@@ -1088,6 +1092,9 @@ input.registerhotkey(6, function()
 	else
 		-- auto-save a mission from a replay
 		if (r_frame == 0) then
+			if recording.replayP1recording then return end
+			recording.humanplayer = 2
+			recording.replayP2recording = true
 			local mission_savestate = savestate.create("new_savestate")
 			savestate.save(mission_savestate)
 			recording.replayP2 = true
@@ -1108,6 +1115,7 @@ input.registerhotkey(6, function()
 			saveMission()
 			emu.takeover()
 			REPLAY=false
+			recording.replayP2recording = false
 			inputs.properties.enableinputswap = true
 			mission_selector = 1
 			missions_checked[1] = loadMissionTakeover()
@@ -1115,7 +1123,7 @@ input.registerhotkey(6, function()
 			local txt1 = "RECORDED "..recorded.." frames."
 			local txt2 = "To take over load: Add-On > Missions > REPLAY_"..r_frame
 			showTxt(480, txt1, txt2)
-			--r_frame = 0
+			r_frame = 0
 		end
 	end
 end)
